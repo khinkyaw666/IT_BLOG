@@ -1,7 +1,19 @@
 <?php 
 include '../config.php'; 
 include '../../dbconnect.php';
+
+if(isset($_GET['id'])) {
+    $id = $_GET['id'];
+    $stmt = $pdo->prepare("SELECT * FROM posts WHERE id = :id");
+    $stmt->execute([
+        'id' => $id
+    ]);
+    $post = $stmt->fetch(PDO::FETCH_ASSOC);
+    // print_r(post);
+}
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -50,54 +62,7 @@ include '../../dbconnect.php';
 
                     <!-- Page Heading -->
                     <h1 class="h3 mb-4 text-gray-800">Post List Page</h1>
-                    
-                    <table class="table table-bordered table-hover">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th>No</th>
-                                <th>Title</th>
-                                <th>Author</th>
-                                <th>Category</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php 
-                                $stmt = $pdo->query("SELECT
-                                    p.id,
-                                    p.title,
-                                    u.name AS author_name,    
-                                    c.name AS category_name,  
-                                    p.status,
-                                    p.created_at
-                            FROM
-                                posts AS p        
-                            INNER JOIN
-                                users AS u ON p.author_id = u.id  -- Join posts with users table (for author name)
-                            INNER JOIN
-                                categories AS c ON p.category_id = c.id; -- Join posts with categories table");
-                                $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                                // print_r($posts);
-                                $i=1;
-                                foreach ($posts as $post):
-                            ?>
-                            <tr>
-                                <td><?= $i++; ?></td>  
-                                <td><?= $post['title'] ?></td>
-                                <td><?= $post['author_name'] ?></td>
-                                <td><?= $post['category_name'] ?></td>
-                                <td>
-                                  <?= $post['status'] ?>
-                                  <p><?= $post['created_at'] ?></p>
-                                </td>
-                                <td>
-                                    <a href="detail.php?id=<?= $post['id'] ?>" class="btn btn-primary">Detail</a>
-                                </td>
-                            </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
+                   
                 </div>
                 <!-- /.container-fluid -->
 
