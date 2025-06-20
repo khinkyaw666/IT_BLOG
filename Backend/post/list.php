@@ -64,23 +64,19 @@ include '../../dbconnect.php';
                         </thead>
                         <tbody>
                             <?php 
-                                $stmt = $pdo->query("SELECT
-                                    p.id,
-                                    p.title,
-                                    u.name AS author_name,    
-                                    c.name AS category_name,  
-                                    p.status,
-                                    p.created_at
-                            FROM
-                                posts AS p        
-                            INNER JOIN
-                                users AS u ON p.author_id = u.id  -- Join posts with users table (for author name)
-                            INNER JOIN
-                                categories AS c ON p.category_id = c.id; -- Join posts with categories table");
+                                $stmt = $pdo->query("SELECT posts.*, users.name AS author_name, categories.name AS category_name FROM posts LEFT JOIN users ON posts.author_id = users.id LEFT JOIN categories ON posts.category_id = categories.id ORDER BY id DESC");
                                 $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 // print_r($posts);
                                 $i=1;
                                 foreach ($posts as $post):
+                                $color = "";
+                                if($post['status'] == 'published') {
+                                  $color = "text-primary";
+                                } else if($post['status'] == 'rejected') {
+                                  $color = "text-danger";
+                                } else if($post['status'] == 'created') {
+                                  $color = "text-success";
+                                }
                             ?>
                             <tr>
                                 <td><?= $i++; ?></td>  
@@ -88,7 +84,7 @@ include '../../dbconnect.php';
                                 <td><?= $post['author_name'] ?></td>
                                 <td><?= $post['category_name'] ?></td>
                                 <td>
-                                  <?= $post['status'] ?>
+                                  <strong class="<?= $color ?>"><?= $post['status'] ?></strong>
                                   <p><?= $post['created_at'] ?></p>
                                 </td>
                                 <td>

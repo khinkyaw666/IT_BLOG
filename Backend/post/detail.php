@@ -58,16 +58,28 @@ if(isset($_GET['id'])) {
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
-                <div class="container-fluid">
+                    <div class="container-fluid">
 
-                    <!-- Page Heading -->
-                    <h1 class="h3 mb-4 text-gray-800">Post List Page</h1>
-                   
-                </div>
-                <!-- /.container-fluid -->
+                        <!-- Page Heading -->
+                        <h1 class="h3 mb-4 text-gray-800">Post Detail Page</h1>
 
-            </div>
-            <!-- End of Main Content -->
+                        <div class="card mb-3">
+                            <!-- <img src="#" class="card-img-top" alt="..."> -->
+                            <div class="card-header">
+                                <a onclick="return confirm('Are you sure to public?')" href="edit.php?id=<?= $post['id'] ?>&key=publish" class="btn btn-info">Public</a>
+                                <a onclick="return confirm('Are you sure to reject?')" href="edit.php?id=<?= $post['id'] ?>&key=reject" class="btn btn-danger">Reject</a>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title"><?= $post['title'] ?></h5>
+                                <p class="card-text"><small class="text-body-secondary">Category: <strong><?= $post['category_name'] ?></strong></small></p>
+                                <p class="card-text"><?= $post['content'] ?></p>
+                                <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
+                                <p><strong>By: <?= $post['author_name'] ?></strong></p>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- End of Main Content -->
 
             <!-- Footer -->
             <?php include '../footer.php'; ?>
